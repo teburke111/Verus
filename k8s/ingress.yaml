@@ -37,4 +37,3 @@ spec:
             name: backend-audio-process-service
             port:
               number: 5000
-        
