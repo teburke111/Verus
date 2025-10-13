@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-audio-process-service
+  name: backend-video-process-service
 spec:
   selector:
-    app: backend-audio-process-service
+    app: backend-video-process-service
   ports:
   - port: 5000
     targetPort: 5000

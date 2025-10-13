@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-audio-process
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-audio-process-service
+  template:
+    metadata:
+      labels:
+        app: backend-audio-process-service
+    spec:
+      containers:
+      - name: backend
+        image: thomasb111/backend-audio-process:latest
+        ports:
+        - containerPort: 5000
