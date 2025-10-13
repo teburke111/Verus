@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-image-process
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-image-process-service
+  template:
+    metadata:
+      labels:
+        app: backend-image-process-service
+    spec:
+      containers:
+      - name: backend
+        image: thomasb111/backend-image-process:latest
+        ports:
+        - containerPort: 5000
