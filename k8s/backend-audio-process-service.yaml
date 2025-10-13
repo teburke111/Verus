@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: backend-text-process-service
+  name: backend-audio-process-service
 spec:
   selector:
-    app: backend-text-process-service
+    app: backend-audio-process-service
   ports:
   - port: 5000
     targetPort: 5000

@@ -16,3 +16,25 @@ spec:
             name: backend-text-process-service
             port:
               number: 5000
+      - path: /image-process
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-image-process-service
+            port:
+              number: 5000
+      - path: /video-process
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-video-process-service
+            port:
+              number: 5000
+      - path: /audio-process
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-audio-process-service
+            port:
+              number: 5000
+        
