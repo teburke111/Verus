@@ -13,6 +13,7 @@ function AddMedia() {
   const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB in bytes
 
 
+  const [message, setMessage] = useState("");
   const [file, setFile] = useState(null);
   const [fileType, setFileType] = useState("")
   const navigate = useNavigate();
@@ -51,13 +52,38 @@ function AddMedia() {
     }
   };
 
-  const handleUpload = () => {
+  const handleUpload = async () => {
     if (!file) {
       alert("Please select a file first!");
       return;
     }
 
     console.log("Uploading:", file);
+
+    if (fileType.startsWith("image/")) {
+      const formData = new FormData();
+      formData.append("image", file);
+
+      try {
+        const response = await fetch("/image-process", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to send image to backend");
+        }
+
+        const data = await response.json();
+        setMessage(data.message);
+      } catch (error) {
+        console.error("Error:", error);
+        setMessage("Error sending image to backend");
+      }
+    } else {
+      setMessage("Only image uploads are supported for now.");
+    }
+
     setFile(null);
     setFileType("");
   };
@@ -102,6 +128,7 @@ function AddMedia() {
                 </label>
             </Box>
             <button className="submitButton" onClick={handleUpload}>Predict</button>
+            {message && <p style={{ marginTop: "1rem" }}>{message}</p>}
         </div>
     </div>
   )
