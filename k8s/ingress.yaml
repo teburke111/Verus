@@ -4,6 +4,7 @@ metadata:
   name: verus-ingress
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
 spec:
   ingressClassName: nginx
   rules:
