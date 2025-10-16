@@ -10,6 +10,16 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 function AddMedia() {
 
+  function getBaseUrl() {
+      const { protocol, hostname, port } = window.location;
+      return `${protocol}//${hostname}${port ? `:${port}` : ''}`;
+    } 
+
+
+  const baseUrl = getBaseUrl();
+  
+
+
   const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB in bytes
 
 
@@ -63,6 +73,7 @@ function AddMedia() {
     if (fileType.startsWith("image/")) {
       const formData = new FormData();
       formData.append("image", file);
+      formData.append("Url", baseUrl);
 
       try {
         const response = await fetch("/image-process", {
