@@ -38,3 +38,10 @@ spec:
             name: backend-audio-process-service
             port:
               number: 5000
+      - path: /image-predict
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-image-predict-service
+            port:
+              number: 5000

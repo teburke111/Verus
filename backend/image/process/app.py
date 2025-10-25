@@ -1,15 +1,8 @@
 from flask import Flask, request, jsonify
-from transformers import AutoImageProcessor, SiglipForImageClassification
-import torch
 import requests
-from PIL import Image, UnidentifiedImageError
 
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB
-
-model_name = "prithivMLmods/deepfake-detector-model-v1"
-processor = AutoImageProcessor.from_pretrained(model_name)
-model = SiglipForImageClassification.from_pretrained(model_name)
 
 @app.route('/', methods=['GET', 'POST'])
 def process():
