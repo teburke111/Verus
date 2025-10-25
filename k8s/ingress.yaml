@@ -45,3 +45,10 @@ spec:
             name: backend-image-predict-service
             port:
               number: 5000
+      - path: /text-predict
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-text-predict-service
+            port:
+              number: 5000

@@ -1,8 +1,10 @@
 from flask import Flask, request, jsonify
 import requests
 
+
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB
+
 
 @app.route('/', methods=['GET', 'POST'])
 def process():

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-text-predict
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-text-predict-service
+  template:
+    metadata:
+      labels:
+        app: backend-text-predict-service
+    spec:
+      containers:
+      - name: backend
+        image: thomasb111/backend-text-predict:latest
+        ports:
+        - containerPort: 5000
