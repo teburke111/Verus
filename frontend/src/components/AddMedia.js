@@ -91,8 +91,31 @@ function AddMedia() {
         console.error("Error:", error);
         setMessage("Error sending image to backend");
       }
+    }
+
+    if (fileType.startsWith("text/")) {
+      const formData = new FormData();
+      formData.append("text", file);
+      formData.append("Url", baseUrl);
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/text-process", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to send text to backend");
+        }
+
+        const data = await response.json();
+        setMessage(data.message);
+      } catch (error) {
+        console.error("Error:", error);
+        setMessage("Error sending text to backend");
+      }
     } else {
-      setMessage("Only image uploads are supported for now.");
+      setMessage("Only text uploads are supported for now.");
     }
 
     setFile(null);
