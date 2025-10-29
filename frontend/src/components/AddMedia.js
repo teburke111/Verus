@@ -99,7 +99,7 @@ function AddMedia() {
       formData.append("Url", baseUrl);
 
       try {
-        const response = await fetch("http://127.0.0.1:5000/text-process", {
+        const response = await fetch("text-process", {
           method: "POST",
           body: formData,
         });
@@ -114,8 +114,29 @@ function AddMedia() {
         console.error("Error:", error);
         setMessage("Error sending text to backend");
       }
-    } else {
-      setMessage("Only text uploads are supported for now.");
+    } 
+
+    if (fileType.startsWith("video/")) {
+      const formData = new FormData();
+      formData.append("video", file);
+      formData.append("Url", baseUrl);
+
+      try {
+        const response = await fetch("video-process", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to video to backend");
+        }
+
+        const data = await response.json();
+        setMessage(data.message);
+      } catch (error) {
+        console.error("Error:", error);
+        setMessage("Error sending video to backend");
+      }
     }
 
     setFile(null);

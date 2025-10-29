@@ -52,3 +52,10 @@ spec:
             name: backend-text-predict-service
             port:
               number: 5000
+      - path: /video-predict
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-video-predict-service
+            port:
+              number: 5000

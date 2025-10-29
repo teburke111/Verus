@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-video-predict
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-video-predict-service
+  template:
+    metadata:
+      labels:
+        app: backend-video-predict-service
+    spec:
+      containers:
+      - name: backend
+        image: thomasb111/backend-video-predict:latest
+        ports:
+        - containerPort: 5000
