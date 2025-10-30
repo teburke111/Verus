@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify, g
-from utils.HASHING import hash_password, verify_password
+from utils.hashing import hash_password, verify_password
 from utils.jwt_HELPER import create_jwt
 from models.user_model import new_user_doc
 
