@@ -5,7 +5,7 @@ from flask import Blueprint, request, jsonify, g
 from werkzeug.utils import secure_filename
 from bson import ObjectId
 from utils.jwt_HELPER import decode_jwt
-from services.user_service import (
+from services.storage_service import (
     ensure_user_dir, can_store_more, file_limit_for_mediatype,
     is_admin, safe_objectid
 )
