@@ -4,7 +4,7 @@ from datetime import datetime
 from flask import Blueprint, request, jsonify, g
 from werkzeug.utils import secure_filename
 from bson import ObjectId
-from utils.jwt_HELPER import decode_jwt
+from utils.jwt_helper import decode_jwt
 from services.storage_service import (
     ensure_user_dir, can_store_more, file_limit_for_mediatype,
     is_admin, safe_objectid
