@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, g
 from utils.hashing import hash_password, verify_password
-from utils.jwt_helper import create_jwt, decode_jwt
+from utils.jwt_helper import decode_jwt
 from models.user_model import new_user_doc
 
 auth_bp = Blueprint("auth", __name__)
