@@ -38,7 +38,7 @@ def classify_text(text):
 
         return output_probs
 
-@app.route('/text-predict', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def home():
     data = request.get_json(force=True)
     print(data)
