@@ -35,7 +35,7 @@ def analyze_video(video_path, frame_rate=1):
     return images
 
 
-@app.route('/video-process', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def process():
     if request.method == 'POST':
         #get uploaded video
