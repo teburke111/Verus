@@ -27,7 +27,7 @@ def classify_image(img_file):
     result = {id2label[str(i)]: round(probs[i] * 100, 2) for i in range(len(probs))}
     return result
 
-@app.route('/video-predict', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def home():
 
     if 'video' not in request.files:
