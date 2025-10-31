@@ -8,7 +8,7 @@ CORS(app)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB
 
 
-@app.route('/text-process', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def process():
     if request.method == 'POST':
         #get uploaded text file
