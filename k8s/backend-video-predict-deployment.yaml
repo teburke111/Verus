@@ -17,3 +17,10 @@ spec:
         image: thomasb111/backend-video-predict:latest
         ports:
         - containerPort: 5000
+        resources:
+            requests:
+              memory: "3Gi"
+              cpu: "1000m"
+            limits:
+              memory: "5Gi"
+              cpu: "2000m"

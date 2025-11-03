@@ -10,7 +10,7 @@ import tempfile
 app = Flask(__name__)
 app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50 MB
 
-def analyze_video(video_path, frame_rate=1):
+def analyze_video(video_path, frame_rate=5):
 
     images = []
 
@@ -66,7 +66,7 @@ def process():
 
             payload = {'message': 'Send Video'}
 
-            response = requests.post(target_url, files=files, data=payload, timeout=50)
+            response = requests.post(target_url, files=files, data=payload, timeout=120)
             data = response.json()
 
             return jsonify({'message': f"{data['reply']}"})
