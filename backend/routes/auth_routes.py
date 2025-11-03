@@ -38,7 +38,7 @@ def login():
    token = create_access_token(
        identity=str(user["_id"]), 
        additional_claims={"username": user["username"], "role": user.get("role", "user")}
-   )
+  )
    return jsonify({"token": token, "expires_in": 3600}), 200
 
 @auth_bp.get("/me")
