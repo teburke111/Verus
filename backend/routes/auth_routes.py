@@ -1,7 +1,7 @@
+from flask_jwt_extended import create_access_token
 from flask import Blueprint, request, jsonify, g
 from utils.hashing import hash_password, verify_password
 from utils.jwt_helper import decode_jwt
-from flask_jwt_extended import create_access_token
 from models.user_model import new_user_doc
 
 auth_bp = Blueprint("auth", __name__)
