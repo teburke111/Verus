@@ -45,7 +45,7 @@ def detect_media_type(filename: str) -> str | None:
 
 @media_bp.post("/upload")
 def upload():
-    user = get_authenticated_user()  # may be None (anonymous)
+    user = get_authenticated_user() 
 
     # Determine if they want to save this upload
     save_requested = (
