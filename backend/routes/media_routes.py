@@ -15,7 +15,7 @@ media_bp = Blueprint("media", __name__)
 
 ALLOWED_EXT = {
     "image": [".jpg", ".jpeg"],
-    "text":  [".txt"],
+    "text": [".txt"],
     "audio": [".mp3"],
     "video": [".mp4"],
 }
