@@ -82,7 +82,7 @@ def upload():
         return jsonify({
             "status": "predicted",
             "media_type": media_type,
-            "confidence": 0.87,  # mock value
+            "confidence": 0.87, 
             "message": "anonymous prediction — not saved"
         }), 200
 
