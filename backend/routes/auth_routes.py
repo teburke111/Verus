@@ -1,6 +1,7 @@
 from flask import Blueprint, request, jsonify, g
 from utils.hashing import hash_password, verify_password
 from utils.jwt_helper import decode_jwt
+from flask_jwt_extended import create_access_token
 from models.user_model import new_user_doc
 
 auth_bp = Blueprint("auth", __name__)
@@ -33,8 +34,12 @@ def login():
     if not user or not verify_password(password, user["password_hash"]):
         return jsonify({"error": "invalid credentials"}), 401
 
-    token = create_jwt({"sub": str(user["_id"]), "username": user["username"], "role": user.get("role", "user")})
-    return jsonify({"token": token, "expires_in": 3600}), 200
+# This is your new line 36
+token = create_access_token(
+    identity=str(user["_id"]), 
+    additional_claims={"username": user["username"], "role": user.get("role", "user")}
+)
+return jsonify({"token": token, "expires_in": 3600}), 200
 
 @auth_bp.get("/me")
 def me():
