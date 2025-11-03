@@ -39,7 +39,7 @@ def login():
        identity=str(user["_id"]), 
        additional_claims={"username": user["username"], "role": user.get("role", "user")}
   )
-   return jsonify({"token": token, "expires_in": 3600}), 200
+  return jsonify({"token": token, "expires_in": 3600}), 200
 
 @auth_bp.get("/me")
 def me():
