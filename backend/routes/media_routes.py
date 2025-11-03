@@ -15,7 +15,7 @@ media_bp = Blueprint("media", __name__)
 
 ALLOWED_EXT = {
     "image": [".jpg", ".jpeg"],
-    "text":  [".txt"],
+    "text":  [".txt"],
     "audio": [".mp3"],
     "video": [".mp4"],
 }
@@ -28,6 +28,7 @@ def get_authenticated_user():
     if len(parts) == 2 and parts[0].lower() == "bearer":
         payload = decode_jwt(parts[1])
         if payload:
+            # We use payload["sub"] which is the user's BSON ObjectId, stored as a string
             user = g.users.find_one({"_id": ObjectId(payload["sub"])})
             if user:
                 return user
@@ -44,7 +45,7 @@ def detect_media_type(filename: str) -> str | None:
 
 @media_bp.post("/upload")
 def upload():
-    user = get_authenticated_user()  # may be None (anonymous)
+    user = get_authenticated_user()  # may be None (anonymous)
 
     # Determine if they want to save this upload
     save_requested = (
@@ -81,11 +82,10 @@ def upload():
         return jsonify({
             "status": "predicted",
             "media_type": media_type,
-            "confidence": 0.87,  # mock value
+            "confidence": 0.87,  # mock value
             "message": "anonymous prediction — not saved"
         }), 200
 
-    # If saving, enforce quota
     if not can_store_more(user.get("used_bytes", 0), size):
         return jsonify({"error": "storage quota exceeded"}), 403
 
@@ -95,7 +95,6 @@ def upload():
     with open(stored_path, "wb") as f:
         f.write(file_bytes)
 
-    # Save metadata
     doc = new_media_doc(
         user_id=user["_id"],
         username=user["username"],
@@ -106,7 +105,6 @@ def upload():
     )
     res = g.media.insert_one(doc)
 
-    # Update user used_bytes
     g.users.update_one(
         {"_id": user["_id"]},
         {"$inc": {"used_bytes": size}, "$set": {"updated_at": datetime.utcnow()}}
@@ -118,3 +116,27 @@ def upload():
         "media_type": media_type,
         "saved": True
     }), 201
+
+
+@media_bp.get("/my_uploads")
+def my_uploads():
+    """
+    Returns a list of all media uploaded by the authenticated user.
+    Requires Authorization: Bearer <token>
+    """
+    user = get_authenticated_user()
+    if not user:
+        return jsonify({"error": "authentication required"}), 401
+
+    media_cursor = g.media.find(
+        {"user_id": user["_id"]},
+        {"stored_path": 0}  
+    ).sort("uploaded_at", -1) 
+
+    uploads = []
+    for doc in media_cursor:
+        doc["id"] = str(doc.pop("_id"))
+        doc["user_id"] = str(doc.pop("user_id"))
+        uploads.append(doc)
+
+    return jsonify({"uploads": uploads}), 200
