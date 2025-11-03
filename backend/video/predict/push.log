@@ -1,0 +1,25 @@
+nohup: ignoring input
+The push refers to repository [docker.io/thomasb111/backend-video-predict]
+0e2052b06cf7: Preparing
+10389d9cf9e0: Preparing
+d3f4e8af0ba3: Preparing
+16f850f3cc77: Preparing
+3fcd45b8180c: Preparing
+72ad42e849c7: Preparing
+29fdaa774d32: Preparing
+4f848346ede3: Preparing
+d7c97cb6f1fe: Preparing
+72ad42e849c7: Waiting
+29fdaa774d32: Waiting
+d7c97cb6f1fe: Waiting
+4f848346ede3: Waiting
+3fcd45b8180c: Layer already exists
+72ad42e849c7: Layer already exists
+29fdaa774d32: Layer already exists
+4f848346ede3: Layer already exists
+d7c97cb6f1fe: Layer already exists
+d3f4e8af0ba3: Pushed
+0e2052b06cf7: Pushed
+16f850f3cc77: Pushed
+10389d9cf9e0: Pushed
+latest: digest: sha256:9e69abd42d6621d37658421d501625f61c94e4c38643efcd3b498e38194584c4 size: 2207
