@@ -8,6 +8,9 @@ class Settings:
     PORT = int(os.getenv("PORT", 5000))
     DEBUG = os.getenv("DEBUG", "true").lower() == "true"
 
+    JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "A-very-long-and-secure-default-secret-key-1234567890ABCDEF")
+    JWT_EXPIRES_SECONDS = int(os.getenv("JWT_EXPIRES_SECONDS", 3600))
+
     GLOBAL_MAX_UPLOAD_BYTES = 200 * 1024 * 1024  # 200 MB
     PER_USER_QUOTA_BYTES = 500 * 1024 * 1024     # 500 MB total/user
     MAX_IMAGE_BYTES = 10 * 1024 * 1024
