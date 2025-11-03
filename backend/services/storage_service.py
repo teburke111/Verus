@@ -138,3 +138,11 @@ def is_admin(user_doc) -> bool:
     """Check if user has admin privileges."""
     return user_doc and user_doc.get("role") == "admin"
 
+from bson import ObjectId
+
+def safe_objectid(id_str: str):
+    """Safely convert a string to an ObjectId, or return None if invalid."""
+    try:
+        return ObjectId(id_str)
+    except Exception:
+        return None
