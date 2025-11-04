@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: verus-backend:latest   # Update with your DockerHub image if pushing externally
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: "mongodb://mongo:27017/"
+        - name: DB_NAME
+          value: "verus_db"
+        - name: JWT_SECRET_KEY
+          value: "super-secure-key-change-me"
+        - name: UPLOAD_ROOT
+          value: "/uploads"
+        - name: DEBUG
+          value: "false"
+        volumeMounts:
+        - name: uploads
+          mountPath: /uploads
+      volumes:
+      - name: uploads
+        emptyDir: {} # ephemeral storage for now
