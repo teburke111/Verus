@@ -59,3 +59,10 @@ spec:
             name: backend-video-predict-service
             port:
               number: 5000
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: backend-service
+            port:
+              number: 5000
