@@ -1,23 +1,22 @@
+# k8s/backend-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend-deployment
-  labels:
-    app: backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backend
+      app: verus-backend
   template:
     metadata:
       labels:
-        app: backend
+        app: verus-backend
     spec:
       containers:
-      - name: backend
-        image: verus-backend:latest   # Update with your DockerHub image if pushing externally
-        imagePullPolicy: IfNotPresent
+      - name: verus-backend
+        image: verus-backend:latest
+        imagePullPolicy: Never  # since you built locally
         ports:
         - containerPort: 5000
         env:
@@ -26,14 +25,22 @@ spec:
         - name: DB_NAME
           value: "verus_db"
         - name: JWT_SECRET_KEY
-          value: "super-secure-key-change-me"
-        - name: UPLOAD_ROOT
-          value: "/uploads"
+          value: "A-very-long-and-secure-default-secret-key-1234567890ABCDEF"
         - name: DEBUG
-          value: "false"
-        volumeMounts:
-        - name: uploads
-          mountPath: /uploads
-      volumes:
-      - name: uploads
-        emptyDir: {} # ephemeral storage for now
+          value: "true"
+        - name: PORT
+          value: "5000"
+---
+# k8s/backend-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: verus-backend
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+  type: ClusterIP
