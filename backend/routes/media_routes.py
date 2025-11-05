@@ -117,6 +117,33 @@ def upload():
         "saved": True
     }), 201
 
+@media_bp.delete("/clear_uploads")
+def clear_uploads():
+    """
+    Deletes all uploaded media for the authenticated user.
+    """
+    user = get_authenticated_user()
+    if not user:
+        return jsonify({"error": "authentication required"}), 401
+
+    media_cursor = g.media.find({"user_id": user["_id"]})
+    total_deleted = 0
+    total_bytes = 0
+
+    for doc in media_cursor:
+        path = doc.get("stored_path")
+        if path and os.path.exists(path):
+            os.remove(path)
+        total_deleted += 1
+        total_bytes += doc.get("size_bytes", 0)
+
+    g.media.delete_many({"user_id": user["_id"]})
+    g.users.update_one(
+        {"_id": user["_id"]},
+        {"$inc": {"used_bytes": -total_bytes}}
+    )
+
+    return jsonify({"status": "cleared", "deleted_count": total_deleted}), 200
 
 @media_bp.get("/my_uploads")
 def my_uploads():
