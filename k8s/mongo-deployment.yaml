@@ -1,8 +1,10 @@
+# k8s/mongo-deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mongo
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: mongo
@@ -12,17 +14,18 @@ spec:
         app: mongo
     spec:
       containers:
-        - name: mongo
-          image: mongo:6
-          ports:
-            - containerPort: 27017
-          volumeMounts:
-            - name: mongo-storage
-              mountPath: /data/db
-      volumes:
+      - name: mongo
+        image: mongo:6
+        ports:
+        - containerPort: 27017
+        volumeMounts:
         - name: mongo-storage
-          emptyDir: {}  # ephemeral; swap to PVC for persistence
+          mountPath: /data/db
+      volumes:
+      - name: mongo-storage
+        emptyDir: {}
 ---
+# k8s/mongo-service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -31,6 +34,6 @@ spec:
   selector:
     app: mongo
   ports:
-    - port: 27017
-      targetPort: 27017
-      protocol: TCP
+  - port: 27017
+    targetPort: 27017
+  type: ClusterIP
