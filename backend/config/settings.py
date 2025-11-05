@@ -2,7 +2,7 @@
 import os
 
 class Settings:
-    MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/")
+    MONGO_URI = os.getenv("MONGO_URI", "mongodb://mongo:27017/")
     DB_NAME = os.getenv("DB_NAME", "verus_db")
     UPLOAD_ROOT = os.getenv("UPLOAD_ROOT", "./uploads")
     PORT = int(os.getenv("PORT", 5000))
