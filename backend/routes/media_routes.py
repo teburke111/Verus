@@ -1,5 +1,4 @@
 import os
-import mimetypes
 from datetime import datetime
 from flask import Blueprint, request, jsonify, g
 from werkzeug.utils import secure_filename
@@ -7,7 +6,6 @@ from bson import ObjectId
 from utils.jwt_helper import decode_jwt
 from services.storage_service import (
     ensure_user_dir, can_store_more, file_limit_for_mediatype,
-    is_admin, safe_objectid
 )
 from models.media_model import new_media_doc
 
@@ -22,13 +20,12 @@ ALLOWED_EXT = {
 
 
 def get_authenticated_user():
-    """Try to decode JWT if present, else return None (anonymous user)."""
+    """Decode JWT if present, else return None."""
     auth = request.headers.get("Authorization", "")
     parts = auth.split()
     if len(parts) == 2 and parts[0].lower() == "bearer":
         payload = decode_jwt(parts[1])
         if payload:
-            # We use payload["sub"] which is the user's BSON ObjectId, stored as a string
             user = g.users.find_one({"_id": ObjectId(payload["sub"])})
             if user:
                 return user
@@ -43,11 +40,10 @@ def detect_media_type(filename: str) -> str | None:
     return None
 
 
+
 @media_bp.post("/upload")
 def upload():
-    user = get_authenticated_user() 
-
-    # Determine if they want to save this upload
+    user = get_authenticated_user()
     save_requested = (
         request.form.get("save") == "true" or
         request.args.get("save") == "true"
@@ -65,36 +61,36 @@ def upload():
     if not media_type:
         return jsonify({"error": "unsupported file type"}), 400
 
-    # Read file bytes once
     file_bytes = file.read()
     size = len(file_bytes)
     max_allowed = file_limit_for_mediatype(media_type)
     if size > max_allowed:
-        return jsonify({"error": f"file too large. limit is {max_allowed // (1024*1024)} MB for {media_type}"}), 413
+        return jsonify({
+            "error": f"file too large. limit is {max_allowed // (1024*1024)} MB for {media_type}"
+        }), 413
 
-    # If user wants to save, they must be logged in
-    if save_requested and not user:
-        return jsonify({"error": "login required to save result"}), 401
-
-    # For anonymous uploads, just simulate prediction (no saving)
-    if not save_requested:
-        # TODO: integrate with inference pod later
+    # Anonymous uploads (not saved)
+    if not save_requested or not user:
         return jsonify({
             "status": "predicted",
             "media_type": media_type,
-            "confidence": 0.87, 
+            "confidence": 0.87,
             "message": "anonymous prediction — not saved"
         }), 200
 
+    # Storage quota check
     if not can_store_more(user.get("used_bytes", 0), size):
         return jsonify({"error": "storage quota exceeded"}), 403
 
-    # Save file to user-specific dir
+    # Save to user directory
     user_dir = ensure_user_dir(user["_id"])
-    stored_path = os.path.join(user_dir, f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{filename}")
+    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+    stored_path = os.path.join(user_dir, f"{timestamp}_{filename}")
+
     with open(stored_path, "wb") as f:
         f.write(file_bytes)
 
+    # Insert metadata in DB
     doc = new_media_doc(
         user_id=user["_id"],
         username=user["username"],
@@ -105,6 +101,7 @@ def upload():
     )
     res = g.media.insert_one(doc)
 
+    # Update user storage usage
     g.users.update_one(
         {"_id": user["_id"]},
         {"$inc": {"used_bytes": size}, "$set": {"updated_at": datetime.utcnow()}}
@@ -117,11 +114,10 @@ def upload():
         "saved": True
     }), 201
 
+
 @media_bp.delete("/clear_uploads")
 def clear_uploads():
-    """
-    Deletes all uploaded media for the authenticated user.
-    """
+    """Deletes all uploaded media for the authenticated user."""
     user = get_authenticated_user()
     if not user:
         return jsonify({"error": "authentication required"}), 401
@@ -133,33 +129,37 @@ def clear_uploads():
     for doc in media_cursor:
         path = doc.get("stored_path")
         if path and os.path.exists(path):
-            os.remove(path)
+            try:
+                os.remove(path)
+            except Exception:
+                pass  # skip if already removed
         total_deleted += 1
         total_bytes += doc.get("size_bytes", 0)
 
+    # Remove entries from DB
     g.media.delete_many({"user_id": user["_id"]})
+
+    # Reset usage counter
     g.users.update_one(
         {"_id": user["_id"]},
-        {"$inc": {"used_bytes": -total_bytes}}
+        {"$inc": {"used_bytes": -total_bytes}, "$set": {"updated_at": datetime.utcnow()}}
     )
 
-    return jsonify({"status": "cleared", "deleted_count": total_deleted}), 200
+    return jsonify({
+        "status": "cleared",
+        "deleted_count": total_deleted
+    }), 200
+
+
 
 @media_bp.get("/my_uploads")
 def my_uploads():
-    """
-    Returns a list of all media uploaded by the authenticated user.
-    Requires Authorization: Bearer <token>
-    """
+    """Return all media uploaded by the authenticated user."""
     user = get_authenticated_user()
     if not user:
         return jsonify({"error": "authentication required"}), 401
 
-    media_cursor = g.media.find(
-        {"user_id": user["_id"]},
-        {"stored_path": 0}  
-    ).sort("uploaded_at", -1) 
-
+    media_cursor = g.media.find({"user_id": user["_id"]}).sort("uploaded_at", -1)
     uploads = []
     for doc in media_cursor:
         doc["id"] = str(doc.pop("_id"))
