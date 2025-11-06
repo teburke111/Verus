@@ -1,13 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppBar, Toolbar, Button, Typography } from "@mui/material";
 
 function Topbar() {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
+  useEffect(() => {
+    // Watch for token changes (login/logout)
+    const handleStorageChange = () => setToken(localStorage.getItem("token"));
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
+  }, []);
 
   function handleLogout() {
     localStorage.removeItem("token");
+    setToken(null);
     navigate("/login");
   }
 
@@ -20,11 +28,11 @@ function Topbar() {
   }
 
   return (
-    <AppBar position="static" style={{ background: "#222" }}>
+    <AppBar position="static" sx={{ background: "#1e1e1e" }}>
       <Toolbar>
         <Typography
           variant="h6"
-          sx={{ flexGrow: 1, cursor: "pointer" }}
+          sx={{ flexGrow: 1, cursor: "pointer", fontWeight: 600 }}
           onClick={() => navigate("/")}
         >
           Verus
