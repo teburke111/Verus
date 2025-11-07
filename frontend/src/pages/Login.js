@@ -1,14 +1,12 @@
-import React from 'react'
-import LoginBox from '../components/LoginBox'
-import SignupBox from '../components/SignupBox'
+import React from "react";
+import LoginBox from "../components/LoginBox";
 
 function Login() {
   return (
-    <div className='loginPage'>
-        {/* <LoginBox /> */}
-        <SignupBox />
+    <div className="loginPage">
+      <LoginBox />
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
