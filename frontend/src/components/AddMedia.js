@@ -7,7 +7,7 @@ import ArticleIcon from "@mui/icons-material/Article";
 import ImageIcon from "@mui/icons-material/Image";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
-const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://localhost:5000";
+const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://155.98.38.240";
 
 function AddMedia() {
   const navigate = useNavigate();
