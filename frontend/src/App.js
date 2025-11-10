@@ -1,5 +1,7 @@
 import './App.css';
 import { Routes, Route } from "react-router-dom";
+// ADD: Import the Topbar component
+import Topbar from './components/Topbar';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
@@ -12,6 +14,8 @@ import MyUploads from "./pages/MyUploads";
 function App() {
   return (
     <div className="App">
+      {/* ADD: Render the Topbar component here */}
+      <Topbar /> 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />

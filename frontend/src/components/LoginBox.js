@@ -2,13 +2,19 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import logo from "../assets/logo.png";
 
-const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://155.98.38.240";
+// FINAL FIX: Using the public Head Node IP and the assigned NodePort (30246)
+// This is the only URL the external browser can resolve.
+const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://130.127.133.148:30246";
 
 function LoginBox() {
   const [userName, setUserName] = useState("");
   const [passWord, setPassWord] = useState("");
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+
+  const displayError = (msg) => {
+    setError(msg);
+  };
 
   function handleSignupClick() {
     window.location.href = "/signup"; // Redirect to signup page
@@ -19,7 +25,7 @@ function LoginBox() {
     setMessage("");
 
     if (!userName || !passWord) {
-      setError("Username and password are required");
+      displayError("Username and password are required");
       return;
     }
 
@@ -30,16 +36,19 @@ function LoginBox() {
         body: JSON.stringify({ username: userName, password: passWord }),
       });
 
+      if (!response.ok) {
+        // Attempt to read JSON error response even if status is non-200
+        const data = await response.json();
+        throw new Error(data.error || `Login failed with status ${response.status}`);
+      }
+      
       const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Login failed");
-      }
-
-      // ✅ Save JWT
-      localStorage.setItem("token", data.token);
+      // Ensure token key is 'jwtToken' for consistency with Topbar.js
+      localStorage.setItem("jwtToken", data.token); 
+      
       setMessage("Login successful!");
-      console.log("✅ Logged in successfully:", data);
+      console.log("✅ Logged in successfully. Token key: jwtToken");
 
       // Redirect to home (or dashboard)
       setTimeout(() => {
@@ -47,7 +56,7 @@ function LoginBox() {
       }, 1000);
     } catch (err) {
       console.error(err);
-      setError(err.message);
+      displayError("❌ " + err.message);
     }
   }
 

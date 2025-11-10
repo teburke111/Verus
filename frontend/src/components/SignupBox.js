@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import logo from "../assets/logo.png";
 
-const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://155.98.38.240";
+// CRITICAL FIX: The browser cannot resolve 'backend-service:5000'. 
+// We must use the external, publicly resolvable IP and NodePort of the backend service.
+// NOTE: I am using 31783 as a placeholder port. Please ensure this matches your BACKEND NodePort.
+const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://130.127.133.148:31783";
 
 function SignupBox() {
   const [firstName, setFirstName] = useState("");
@@ -13,21 +16,26 @@ function SignupBox() {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
 
+  const displayError = (msg) => {
+    setError(msg);
+  };
+
   async function handleSignup() {
     setError("");
     setMessage("");
 
     if (!userName || !passWord || !confirmPassword) {
-      setError("All fields are required");
+      displayError("All fields are required");
       return;
     }
 
     if (passWord !== confirmPassword) {
-      setError("Passwords do not match");
+      displayError("Passwords do not match");
       return;
     }
 
     try {
+      // API_BASE must be a public IP/Port (e.g., NodePort)
       const response = await fetch(`${API_BASE}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -55,7 +63,8 @@ function SignupBox() {
       }, 1500);
     } catch (err) {
       console.error(err);
-      setError(err.message);
+      // Use the error message from the catched error
+      displayError("❌ " + err.message);
     }
   }
 
