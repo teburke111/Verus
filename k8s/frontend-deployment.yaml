@@ -14,6 +14,8 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: thomasb111/frontend:latest
+        image: ia984818/verus-frontend:latest
+        imagePullPolicy: Always 
         ports:
         - containerPort: 80
+

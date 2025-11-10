@@ -8,8 +8,11 @@ from flask_jwt_extended import JWTManager
 
 def create_app():
     app = Flask(__name__)
-    app.config["MAX_CONTENT_LENGTH"] = settings.GLOBAL_MAX_UPLOAD_BYTES  # hard stop
-    CORS(app, supports_credentials=True, origins=settings.CORS_ALLOWED_ORIGINS)
+    app.config["MAX_CONTENT_LENGTH"] = settings.GLOBAL_MAX_UPLOAD_BYTES # hard stop
+    
+    # FIX: Changing origins to '*' to allow all external IPs (like your NodePort) 
+    # to communicate with the service without being blocked by CORS.
+    CORS(app, supports_credentials=True, origins='*') 
 
     app.config["JWT_SECRET_KEY"] = settings.JWT_SECRET_KEY if hasattr(settings, 'JWT_SECRET_KEY') else "a-strong-temporary-key"
     app.config["JWT_ACCESS_TOKEN_EXPIRES"] = 3600
@@ -31,4 +34,3 @@ def create_app():
 if __name__ == "__main__":
     app = create_app()
     app.run(host="0.0.0.0", port=settings.PORT, debug=settings.DEBUG)
-
