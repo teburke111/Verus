@@ -25,7 +25,7 @@ def process():
         print(type(base_url))
         if not base_url:
             return jsonify({'message': 'Missing Url field in form data'}), 400
-        target_url = f"{base_url}/image-predict"
+        target_url = f"{base_url}:5000/"
 
         try:
             # Example payload to send

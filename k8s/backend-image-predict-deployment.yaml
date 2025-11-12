@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: backend
-        image: thomasb111/backend-image-predict:latest
+        image: ia984818/backend-image-predict:latest
         ports:
         - containerPort: 5000

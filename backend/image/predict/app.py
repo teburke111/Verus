@@ -39,8 +39,9 @@ def home():
     filename = image_file.filename
 
     message = classify_image(image_file)
+    if message is None:
+        return jsonify({"reply": "Error: Could not process image"}), 500
     return jsonify({"reply": f"Prediction: {message[0]} Confidence: {message[1]}"})
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

@@ -23,7 +23,7 @@ def process():
         #get Url for request
         if not base_url:
             return jsonify({'message': 'Missing Url field in form data'}), 400
-        target_url = f"{base_url}/text-predict"
+        target_url = f"{base_url}:5000/"
 
         #get text from text file
         text = text_file.read().decode('utf-8')

@@ -49,7 +49,7 @@ def process():
         base_url = request.form.get('Url')
         if not base_url:
             return jsonify({'message': 'Missing Url field in form data'}), 400
-        target_url = f"{base_url}/video-predict"
+        target_url = f"{base_url}:5000/"
 
         try:
             # payload to send

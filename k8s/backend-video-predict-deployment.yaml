@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: thomasb111/backend-video-predict:latest
+        image: ia984818/backend-video-predict:latest
         ports:
         - containerPort: 5000
         resources:

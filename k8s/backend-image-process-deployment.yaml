@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
       - name: backend
-        image: thomasb111/backend-image-process:latest
+        image: ia984818/backend-image-process:latest
         ports:
         - containerPort: 5000

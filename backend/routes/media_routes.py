@@ -1,4 +1,5 @@
 import os
+import requests
 from datetime import datetime
 from flask import Blueprint, request, jsonify, g
 from werkzeug.utils import secure_filename
@@ -16,6 +17,14 @@ ALLOWED_EXT = {
     "text": [".txt"],
     "audio": [".mp3"],
     "video": [".mp4"],
+}
+
+# Kubernetes service URLs for prediction microservices (process services)
+PREDICTION_SERVICES = {
+    "image": "http://backend-image-process-service:5000",
+    "text": "http://backend-text-process-service:5000",
+    "video": "http://backend-video-process-service:5000",
+    "audio": "http://backend-audio-process-service:5000",
 }
 
 
@@ -39,6 +48,79 @@ def detect_media_type(filename: str) -> str | None:
             return mtype
     return None
 
+
+def call_prediction_service(media_type: str, file_bytes: bytes, filename: str):
+    """Call the appropriate prediction microservice."""
+    service_url = PREDICTION_SERVICES.get(media_type)
+    if not service_url:
+        return {"error": "No prediction service available", "confidence": None}
+    
+    # Base URL for each predict service (used by process services to forward)
+    predict_services = {
+        "image": "http://backend-image-predict-service",
+        "text": "http://backend-text-predict-service",
+        "video": "http://backend-video-predict-service",
+        "audio": "http://backend-audio-predict-service",
+    }
+    base_url = predict_services.get(media_type, "http://backend")
+    
+    try:
+        # Prepare the request based on media type
+        if media_type == "text":
+            # For text, send the content directly
+            files = {'text': (filename, file_bytes, 'text/plain')}
+            data = {'Url': base_url}
+        elif media_type == "image":
+            files = {'image': (filename, file_bytes, 'image/jpeg')}
+            data = {'Url': base_url}
+        elif media_type == "video":
+            files = {'video': (filename, file_bytes, 'video/mp4')}
+            data = {'Url': base_url}
+        elif media_type == "audio":
+            files = {'audio': (filename, file_bytes, 'audio/mpeg')}
+            data = {'Url': base_url}
+        else:
+            return {"error": "Unsupported media type", "confidence": None}
+        
+        # Call the process service (which will forward to predict service)
+        response = requests.post(service_url, files=files, data=data, timeout=120)
+        
+        if response.status_code == 200:
+            result = response.json()
+            # Extract the prediction message
+            prediction_message = result.get('message', result.get('reply', 'Unknown'))
+            
+            # Try to parse confidence from the message
+            # Expected formats: "Prediction: Fake Confidence: 85.2" or "Prediction: 0.8542"
+            confidence = None
+            if 'Confidence:' in prediction_message:
+                try:
+                    confidence = float(prediction_message.split('Confidence:')[1].strip().split()[0])
+                except:
+                    confidence = None
+            elif 'Prediction:' in prediction_message:
+                try:
+                    pred_value = prediction_message.split('Prediction:')[1].strip()
+                    # Try to extract just the number
+                    import re
+                    numbers = re.findall(r'\d+\.?\d*', pred_value)
+                    if numbers:
+                        confidence = float(numbers[0])
+                except:
+                    confidence = None
+            
+            return {
+                "prediction": prediction_message,
+                "confidence": confidence,
+                "raw_response": result
+            }
+        else:
+            return {"error": f"Prediction service returned {response.status_code}", "confidence": None}
+            
+    except requests.exceptions.Timeout:
+        return {"error": "Prediction service timeout", "confidence": None}
+    except Exception as e:
+        return {"error": f"Prediction failed: {str(e)}", "confidence": None}
 
 
 @media_bp.post("/upload")
@@ -69,12 +151,16 @@ def upload():
             "error": f"file too large. limit is {max_allowed // (1024*1024)} MB for {media_type}"
         }), 413
 
+    # Call prediction service for all uploads (anonymous or not)
+    prediction_result = call_prediction_service(media_type, file_bytes, filename)
+    
     # Anonymous uploads (not saved)
     if not save_requested or not user:
         return jsonify({
             "status": "predicted",
             "media_type": media_type,
-            "confidence": 0.87,
+            "confidence": prediction_result.get("confidence"),
+            "prediction": prediction_result.get("prediction", "Prediction completed"),
             "message": "anonymous prediction — not saved"
         }), 200
 
@@ -111,6 +197,8 @@ def upload():
         "status": "uploaded",
         "media_id": str(res.inserted_id),
         "media_type": media_type,
+        "confidence": prediction_result.get("confidence"),
+        "prediction": prediction_result.get("prediction", "Prediction completed"),
         "saved": True
     }), 201
 
@@ -149,7 +237,6 @@ def clear_uploads():
         "status": "cleared",
         "deleted_count": total_deleted
     }), 200
-
 
 
 @media_bp.get("/my_uploads")

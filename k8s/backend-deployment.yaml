@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
       - name: verus-backend
-        image: ia984818/verus-backend:latest
-        imagePullPolicy: IfNotPresent
+        image: ia984818/verus-backend:v4
+        imagePullPolicy: Always
         ports:
         - containerPort: 5000
         env:
