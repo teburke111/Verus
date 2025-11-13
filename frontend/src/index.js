@@ -9,15 +9,11 @@ import { AuthProvider } from './AuthContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  // Use React.StrictMode for cleaner development checks
-  <React.StrictMode>
-    <BrowserRouter>
-      {/* ADD: Wrap App with AuthProvider */}
-      <AuthProvider> 
-        <App />
-      </AuthProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </BrowserRouter>
 );
 
 reportWebVitals();

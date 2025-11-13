@@ -10,6 +10,13 @@ spec:
   rules:
   - http:
       paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: frontend-service # Matches name in frontend-service.yaml
+            port:
+              number: 80
       - path: /text-process
         pathType: Prefix
         backend:
