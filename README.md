@@ -10,7 +10,7 @@ The **Deepfake & Synthetic Media Detector** is a cloud-native, Kubernetes-based 
 - Text
 - Audio
 - Image
-- Video<br>
+- Video
 
 The system integrates a React frontend, a Flask API backend, and distributed microservices for preprocessing, inference, persistence (via mongoDB), and authentication.
 
