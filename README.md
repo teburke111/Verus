@@ -1,4 +1,4 @@
-## # <img src="logo/logo.png" alt="Verus Logo" width="40" /> 
+## <img src="logo/logo.png" alt="Verus Logo" width="60" /> 
 
 
 ## Table of Contents
