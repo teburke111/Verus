@@ -3,14 +3,14 @@
 
 ## Table of Contents
 - [Overview](#Overview)
-- [Features]
+- [Features](#features)
 
 ## Overview 
 The **Deepfake & Synthetic Media Detector** is a cloud-native, Kubernetes-based application designed to detect AI-generated or manipulated content across multiple media types: 
 - Text
 - Audio
 - Image
-- Video 
+- Video<br> 
 The system integrates a React frontend, a Flask API backend, and distributed microservices for preprocessing, inference, persistence (via mongoDB), and authentication.
 
 ## Features
