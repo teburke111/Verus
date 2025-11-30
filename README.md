@@ -42,6 +42,27 @@ The system integrates a React frontend, a Flask API backend, and distributed mic
 ## Installation & Running Instructions
 
 ## Api Endpoints
+**Authentication**
 
+POST/auth/register
+Registers a new user.
 
+POST/auth/login
+Returns a JWT and expiration time.
 
+**File Upload**
+
+POST/upload (JWT required)
+Uploads a file for processing.
+Respose: job_id + processing status.
+
+**Results**
+
+GET/result/{job_id}
+Returns classification + confidence.
+
+GET/history
+Returns stored inference history.
+
+DELETE/history/clear
+Clears user's stored results.
