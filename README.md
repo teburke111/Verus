@@ -28,6 +28,23 @@ The system integrates a React frontend, a Flask API backend, and distributed mic
 - Daily backup & failover support.
 
 ## Architecture 
+(There will be a data flow diagram here eventually!)
+##![Architecture Diagram ](architecture/diagram.png)
+The system follows a distributed microservice architecture.
+
+**Core Components**
+- React Frontend — user upload, authentication, dashboard.
+- Flask API Gateway — main entry point, upload routing, JWT auth.
+- Preprocessing Service — converts and normalizes input.
+- Inference Service (multi-container):
+   - text model
+   - audio model
+   - image model
+   - video model
+   - logging sidecar
+- User Management Service — registration, login, token issuance.
+- MongoDB StatefulSet — metadata, history, users.
+- PVC Storage — raw files, logs.
 
 ## Tech Stack
 - Frontend: React
