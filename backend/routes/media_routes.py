@@ -183,7 +183,10 @@ def upload():
         stored_path=stored_path,
         filename=filename,
         size_bytes=size,
-        media_type=media_type
+        media_type=media_type,
+        prediction=prediction_result.get("prediction"),
+        confidence=prediction_result.get("confidence"),
+        raw_prediction=prediction_result.get("raw_response")
     )
     res = g.media.insert_one(doc)
 
