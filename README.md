@@ -76,8 +76,7 @@ cd Verus
 
 3. **Run deployment Script**
 ```bash
-chmod +x deploy.sh
-./deploy.sh
+./startup.sh
 ```
 
 4. **Access Front End**
