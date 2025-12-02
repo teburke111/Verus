@@ -23,10 +23,10 @@ function AddMedia() {
   const [fileType, setFileType] = useState("");
   const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50 MB
 
-  const ImageClick = () => navigate("/Images");
-  const TextClick = () => navigate("/Text");
-  const AudioClick = () => navigate("/Audio");
-  const VideoClick = () => navigate("/Video");
+  // const ImageClick = () => navigate("/Images");
+  // const TextClick = () => navigate("/Text");
+  // const AudioClick = () => navigate("/Audio");
+  // const VideoClick = () => navigate("/Video");
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -149,7 +149,6 @@ function AddMedia() {
         {/* ... existing MediaBoxes code remains the same ... */}
         <Box
           className="mediaBox"
-          onClick={ImageClick}
           style={{
             borderColor: fileType.startsWith("image/") ? "white" : "black",
           }}
@@ -161,7 +160,6 @@ function AddMedia() {
 
         <Box
           className="mediaBox"
-          onClick={TextClick}
           style={{
             borderColor: fileType.startsWith("text/") ? "white" : "black",
           }}
@@ -171,7 +169,7 @@ function AddMedia() {
           <p className="allowedTypes">.txt</p>
         </Box>
 
-        <Box
+        {/* <Box
           className="mediaBox"
           onClick={AudioClick}
           style={{
@@ -181,11 +179,10 @@ function AddMedia() {
           <h1 className="imageTitle">Audio</h1>
           <AudioFileIcon className="icon" />
           <p className="allowedTypes">.mp3</p>
-        </Box>
+        </Box> */}
 
         <Box
           className="mediaBox"
-          onClick={VideoClick}
           style={{
             borderColor: fileType.startsWith("video/") ? "white" : "black",
           }}
@@ -205,7 +202,7 @@ function AddMedia() {
             type="file"
             onChange={handleFileChange}
             style={{ display: "none" }}
-            accept=".jpg,.jpeg,.txt,.mp3,.mp4"
+            accept=".jpg,.jpeg,.txt,,.mp4"
           />
           <label htmlFor="fileInput" className="customFileButton">
             <AddCircleOutlineIcon className="addIcon" />
@@ -234,7 +231,7 @@ function AddMedia() {
             </button>
         )}
 
-        {message && <p style={{ marginTop: "1rem" }}>{message}</p>}
+        {message && <p style={{ marginTop: "1rem", color: "white" }}>{message}</p>}
       </div>
     </div>
   );

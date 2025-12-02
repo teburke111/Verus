@@ -130,6 +130,30 @@
   margin-bottom: 18px;
 }
 
+.Signup{
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  margin-top: 20px;
+  align-items: center;
+}
+
+.signupBox{
+  width: 400px;
+}
+
+.Login{
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  margin-top: 50px;
+  align-items: center;
+}
+
+.loginBox{
+  width: 400px;
+}
+
 .clickable{
   color: blue;
   text-decoration: underline;
@@ -156,13 +180,12 @@
   border: 3px solid black;
   border-radius: 15px;
   height: auto;
-  width: 20%;
+  width: 30%;
   margin: 1%;
   align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  cursor: pointer;          
 }
 
 .imageTitle{
@@ -274,20 +297,31 @@
 
 @media only screen and (max-width: 600px) {
   .mediaBox {
-    width: 120px;   /* smaller width on phone */
-    height: 120px;  /* smaller height on phone */
+    max-width: 120px;   /* smaller width on phone */
+    height: 125px;  /* smaller height on phone */
     font-size: 18px;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .loginBox{
+    width: 90%;
+  }
+
+  .signupBox{
+    width: 90%;
   }
 
   .MediaBoxes {
-    margin-top: 50px;
+    margin-top: 70px !important;
     display: flex;
     flex-direction: row;       
     flex-wrap: wrap;           
     justify-content: center;   
     align-items: flex-start;  
-    gap: 20px;   
+    gap: 5px;   
     margin-top: 0px;   
+    padding: 0 !important;
   }
 
   .mediaBox{
@@ -298,6 +332,10 @@
   .icon{
     font-size: 12vh !important;
     margin: 0px !important;
+  }
+
+  .toolbar{
+    padding: 0 !important;
   }
 
   .imageTitle{

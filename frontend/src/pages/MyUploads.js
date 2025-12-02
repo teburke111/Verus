@@ -87,7 +87,7 @@ function MyUploads() {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h5" sx={{ mb: 2 }}>
+      <Typography variant="h5" sx={{ mb: 2, color: "white" }}>
         My Uploads
       </Typography>
 
@@ -96,14 +96,14 @@ function MyUploads() {
       ) : error ? (
         <Typography color="error">{error}</Typography>
       ) : uploads.length === 0 ? (
-        <Typography>No uploads yet.</Typography>
+        <Typography sx={{ color: "white" }} >No uploads yet.</Typography>
       ) : (
         <>
           <Button
             variant="contained"
             color="error"
             onClick={handleClearUploads}
-            sx={{ mb: 2 }}
+            sx={{ mb: 2, color: "white"}}
           >
             Clear All Uploads
           </Button>
@@ -113,8 +113,16 @@ function MyUploads() {
     		<ListItem key={u.id} divider>
       			<ListItemText
         		primary={u.filename}
-        		secondary={`Type: ${u.media_type} • ${Math.round(u.size_bytes / 1024)} KB • Uploaded: ${new Date(u.created_at).toLocaleString()} • Verdict: ${u.verdict} • Confidence: ${u.confidence} • Raw: ${u.raw_prediction}`}
-      			/>
+        		secondary={`Type: ${u.media_type} • ${Math.round(u.size_bytes / 1024)} KB • Uploaded: ${new Date(u.created_at).toLocaleString()} • Confidence: ${u.confidence}`}
+            slotProps={{
+              primary: {
+                sx: { color: "white", fontWeight: "bold" }
+              },
+              secondary: {
+                sx: { color: "white" }
+              }
+            }}
+            />
     		</ListItem>
   		))}
 	</List>

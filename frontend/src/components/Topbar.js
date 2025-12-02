@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from '../assets/logo.png'
 import { AppBar, Toolbar, Button, Typography, Box } from "@mui/material";
 
 function Topbar() {
@@ -52,10 +53,10 @@ function Topbar() {
   }
 
   return (
-    <AppBar position="static" sx={{ background: "#1e1e1e" }}>
-      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+    <AppBar position="static" sx={{ background: "#A8A8A8" }}>
+      <Toolbar className="toolbar" sx={{ display: "flex", justifyContent: "space-between" }}>
         {/* Logo / Brand */}
-        <Typography
+        {/* <Typography
           variant="h6"
           sx={{
             cursor: "pointer",
@@ -66,7 +67,9 @@ function Topbar() {
           onClick={handleHome}
         >
           Verus
-        </Typography>
+        </Typography> */}
+
+        <img  className="logo" src={logo} style= {{height: "70px", cursor: "pointer"}} onClick={handleHome}/>
 
         {/* Right side buttons - Using flex and gap for clean spacing */}
         <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
