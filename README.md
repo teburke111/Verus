@@ -81,7 +81,7 @@ chmod +x deploy.sh
 ```
 
 4. **Access Front End**
-- Access your website at: http://<NODE_IP>:<NODEPORT>
+- Access your website at: `http://<NODE_IP>:<NODEPORT>`
 
 
 
