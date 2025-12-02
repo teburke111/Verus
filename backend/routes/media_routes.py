@@ -109,9 +109,16 @@ def call_prediction_service(media_type: str, file_bytes: bytes, filename: str):
                 except:
                     confidence = None
             
+            if "Real Video" in prediction_message and confidence is not None:
+                confidence -= 50  # subtract 50
+                if confidence < 0:
+                    confidence = 0
+            elif "Real" in prediction_message and confidence is not None:
+                confidence = 100 - confidence
+            
             return {
                 "prediction": prediction_message,
-                "confidence": confidence,
+                "confidence": round(confidence, 2),
                 "raw_response": result
             }
         else:
@@ -154,6 +161,8 @@ def upload():
     # Call prediction service for all uploads (anonymous or not)
     prediction_result = call_prediction_service(media_type, file_bytes, filename)
     
+    print(prediction_result)
+
     # Anonymous uploads (not saved)
     if not save_requested or not user:
         return jsonify({
@@ -188,6 +197,8 @@ def upload():
         confidence=prediction_result.get("confidence"),
         raw_prediction=prediction_result.get("raw_response")
     )
+    print(prediction_result.get("prediction"))
+    print(prediction_result.get("confidence"))
     res = g.media.insert_one(doc)
 
     # Update user storage usage

@@ -109,19 +109,15 @@ function MyUploads() {
           </Button>
 
           <List>
-            {uploads.map((u) => (
-              <ListItem key={u.id} divider>
-                <ListItemText
-                  primary={u.filename}
-                  secondary={`Type: ${u.media_type} • ${Math.round(
-                    u.size_bytes / 1024
-                  )} KB • Uploaded: ${new Date(
-                    u.created_at
-                  ).toLocaleString()}`}
-                />
-              </ListItem>
-            ))}
-          </List>
+  		{uploads.map((u) => (
+    		<ListItem key={u.id} divider>
+      			<ListItemText
+        		primary={u.filename}
+        		secondary={`Type: ${u.media_type} • ${Math.round(u.size_bytes / 1024)} KB • Uploaded: ${new Date(u.created_at).toLocaleString()} • Verdict: ${u.verdict} • Confidence: ${u.confidence} • Raw: ${u.raw_prediction}`}
+      			/>
+    		</ListItem>
+  		))}
+	</List>
         </>
       )}
     </Box>

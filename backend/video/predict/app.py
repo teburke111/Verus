@@ -43,12 +43,6 @@ def home():
     odds = total/i
     
 
-    if odds > 50:
-        classify = "AI-Generated"
-    else:
-        classify = "Real Video"
-        odds = odds + 50
-
     return jsonify({"reply": f"Prediction: {classify} Confidence: {odds}"})
 
 
