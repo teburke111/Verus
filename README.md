@@ -67,6 +67,7 @@ The system follows a distributed microservice architecture.
 1. *Clone the repository*
 ```bash
 git clone https://github.com/teburke111/Verus.git
+```
 
 ## Api Endpoints
 **Authentication**
