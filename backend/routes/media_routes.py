@@ -115,6 +115,8 @@ def call_prediction_service(media_type: str, file_bytes: bytes, filename: str):
                     confidence = 0
             elif "Real" in prediction_message and confidence is not None:
                 confidence = 100 - confidence
+            elif media_type == "text":
+                confidence *= 100
             
             return {
                 "prediction": prediction_message,
