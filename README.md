@@ -28,7 +28,7 @@ The system integrates a React frontend, a Flask API backend, and distributed mic
 - Daily backup & failover support.
 
 ## Architecture 
-<img width="1440" height="900" alt="diagram" src="https://github.com/user-attachments/assets/fadc3241-34b5-4314-a8a8-a437e0717692" />
+[Blank board.pdf](https://github.com/user-attachments/files/23892515/Blank.board.pdf)
 
 
 The system follows a distributed microservice architecture.
