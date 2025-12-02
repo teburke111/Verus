@@ -57,17 +57,33 @@ The system follows a distributed microservice architecture.
 ## Installation & Running Instructions
 
 **Initizlize CloudLab Experiment**
-1. Login to CloudLab and select the k8s-578 project profile.
-2. Instantiate using the rawPC branch.
+1. *Login to CloudLab and select the k8s-578 project profile.*
+2. *Instantiate using the rawPC branch.*
    - 3 nodes
    - Cloudlab Clemson Cluster
-3. Once the experiment is ready, SSH into it.
+3. *Once the experiment is ready, SSH into it.*
 
 **Deploy Kubernetes Components**
 1. *Clone the repository*
 ```bash
 git clone https://github.com/teburke111/Verus.git
 ```
+
+2. *Change into project directory*
+```bash
+cd Verus
+```
+
+3. *Run deployment Script*
+```bash
+chmod +x deploy.sh
+./deploy.sh
+```
+
+4. *Access Front End*
+- Access your website at: http://<NODE_IP>:<NODEPORT>
+
+
 
 ## Api Endpoints
 **Authentication**
