@@ -75,14 +75,14 @@ function Topbar() {
         <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
           
           {/* SAVE BUTTON: ALWAYS VISIBLE, placed first for prominence */}
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSave}
-            sx={{ fontWeight: 'bold' }}
-          >
-            Save
-          </Button>
+          // <Button
+          //   variant="contained"
+          //   color="primary"
+          //   onClick={handleSave}
+          //   sx={{ fontWeight: 'bold' }}
+          // >
+          //   Save
+          // </Button>
 
           {token ? (
             // Logged In View: My Uploads, Logout
