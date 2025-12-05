@@ -4,6 +4,7 @@
 ## Table of Contents
 - [Overview](#Overview)
 - [Features](#features)
+- [Demo](#demo)
 - [Architecture](#architecture-diagram)
 - [Tech-Stack](#tech-stack)
 - [Installation-&-Running-Instructions](#installation--running-instructions)
